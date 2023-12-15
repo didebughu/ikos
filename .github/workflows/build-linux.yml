@@ -38,3 +38,10 @@ jobs:
       - name: Confirm that it runs
         run: |
           ikos --version
+      - name: Package and Upload Binary to Release 
+        if: success() # Only execute this step if the previous steps were successful 
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          zip -r ikos-binary.zip /opt/ikos
+          gh release create v1.0.0 ikos-binary.zip -t "Release v1.0.0" -n "Release notes for v1.0.0"
